@@ -19,6 +19,8 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     upline_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
     upline = db.relationship(lambda: User, remote_side=id, backref='downline')
+    title = db.Column(db.String(20), nullable=False, default='REN')
+    user_sale = db.relationship(lambda: UserSale, remote_side=id, backref='user')
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -46,3 +48,35 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
+
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    location = db.Column(db.String(50), nullable=False)
+    project_sale = db.relationship(lambda: ProjectSale, remote_side=id, backref='project')
+    
+    def __repr__(self):
+        return f"Project('{self.name}')"
+
+class ProjectSale(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    spaprice = spaprice = db.Column(db.Float(), nullable=False)
+    netprice = db.Column(db.Float(), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    user_sale = db.relationship(lambda: UserSale, remote_side=id, backref='project_sale')
+    
+    def __repr__(self):
+        return f"ProjectSale('{self.id}')"
+
+
+class UserSale(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    percentage = db.Column(db.Float(), nullable=False)
+    netvalue = db.Column(db.Float(), nullable=False)
+    project_sale_id = db.Column(db.Integer, db.ForeignKey('project_sale.id'), nullable=False)
+    
+    def __repr__(self):
+        return f"UserSale('{self.id}')"
