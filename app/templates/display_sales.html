@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+  <table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Project</th>
+      <th scope="col">Unit No.</th>
+      <th scope="col">Net Price (RM)</th>
+      <th scope="col">REN</th>
+      <th scope="col">REN %</th>
+      <th scope="col">Net Value(RM)</th>
+      <th scope="col">Commission</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for x in usersale %}
+    <tr>
+      <th scope="col">{{x.project_sale.date_posted.strftime('%Y-%m-%d')}}</th>
+      <th scope="col">{{x.project_sale.project.name}}</th>
+      <th scope="col">{{x.project_sale.unit_number}}</th>
+      <th scope="col">{{"{:,.2f}".format(x.project_sale.netprice)}}</th>
+      <th scope="col">{{x.user.username}}</th>
+      <th scope="col">{{x.percentage}}</th>
+      <th scope="col">{{"{:,.2f}".format(x.netvalue)}}</th>
+      <th scope="col">{{"{:,.2f}".format(x.commission)}}</th>
+      <th scope="col">#</th>
+    </tr>
+  {% endfor%}
+    
+  </tbody>
+</table>
+
+
+{% endblock content %}

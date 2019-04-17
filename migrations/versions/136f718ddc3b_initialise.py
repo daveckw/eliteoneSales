@@ -1,8 +1,8 @@
-"""Added Projects and Sales
+"""Initialise
 
-Revision ID: 44afc9821bcc
+Revision ID: 136f718ddc3b
 Revises: 
-Create Date: 2019-04-16 22:27:19.741265
+Create Date: 2019-04-17 01:15:41.530080
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '44afc9821bcc'
+revision = '136f718ddc3b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,6 +33,8 @@ def upgrade():
     sa.Column('password', sa.String(length=60), nullable=False),
     sa.Column('upline_id', sa.Integer(), nullable=True),
     sa.Column('title', sa.String(length=20), nullable=False),
+    sa.Column('team', sa.String(length=50), nullable=True),
+    sa.Column('location', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['upline_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
@@ -51,18 +53,23 @@ def upgrade():
     op.create_table('project_sale',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('date_posted', sa.DateTime(), nullable=False),
-    sa.Column('spaprice', sa.Numeric(), nullable=False),
-    sa.Column('netprice', sa.Numeric(), nullable=False),
+    sa.Column('unit_number', sa.String(length=50), nullable=False),
+    sa.Column('size', sa.String(length=50), nullable=False),
+    sa.Column('buyer', sa.String(length=100), nullable=False),
+    sa.Column('spaprice', sa.Float(), nullable=False),
+    sa.Column('netprice', sa.Float(), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('remark', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['project.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user_sale',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('percentage', sa.Numeric(), nullable=False),
-    sa.Column('netvalue', sa.Numeric(), nullable=False),
+    sa.Column('percentage', sa.Float(), nullable=False),
+    sa.Column('netvalue', sa.Float(), nullable=False),
     sa.Column('project_sale_id', sa.Integer(), nullable=False),
+    sa.Column('commission', sa.Float(), nullable=True),
     sa.ForeignKeyConstraint(['project_sale_id'], ['project_sale.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

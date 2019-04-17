@@ -21,6 +21,8 @@ class User(db.Model, UserMixin):
     upline = db.relationship(lambda: User, remote_side=id, backref='downline')
     title = db.Column(db.String(20), nullable=False, default='REN')
     user_sale = db.relationship(lambda: UserSale, remote_side=id, backref='user')
+    team = db.Column(db.String(50))
+    location = db.Column(db.String(50))
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -62,14 +64,19 @@ class Project(db.Model):
 class ProjectSale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    unit_number = db.Column(db.String(50), nullable=False)
+    size = db.Column(db.String(50), nullable=False)
+    buyer = db.Column(db.String(100), nullable=False)
     spaprice = spaprice = db.Column(db.Float(), nullable=False)
     netprice = db.Column(db.Float(), nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     user_sale = db.relationship(lambda: UserSale, remote_side=id, backref='project_sale')
+    package = db.Column(db.String(100))
+    remark = db.Column(db.Text)
+    created_by = db.Column(db.Text)
     
     def __repr__(self):
-        return f"ProjectSale('{self.id}')"
-
+        return f"ProjectSale('{self.project.name} RM{self.spaprice}')"
 
 class UserSale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,6 +84,7 @@ class UserSale(db.Model):
     percentage = db.Column(db.Float(), nullable=False)
     netvalue = db.Column(db.Float(), nullable=False)
     project_sale_id = db.Column(db.Integer, db.ForeignKey('project_sale.id'), nullable=False)
+    commission = db.Column(db.Float)
     
     def __repr__(self):
         return f"UserSale('{self.id}')"
