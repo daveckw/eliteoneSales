@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+  
+  <table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">fullname</th>
+      <th scope="col">username</th>
+      <th scope="col">title</th>
+      <th scope="col">ic_number</th>
+      <th scope="col">email</th>
+      <th scope="col">phone_number</th>
+      <th scope="col">birthday</th>
+      <th scope="col">location</th>
+      <th scope="col">date_created</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for x in user %}
+    <tr>
+      <th scope="col">{{x.fullname}}</th>
+      <th scope="col">{{x.username}}</th>
+      <th scope="col">{{x.title}}</th>
+      <th scope="col">{{x.ic_number}}</th>
+      <th scope="col">{{x.email}}</th>
+      <th scope="col">{{x.phone_number}}</th>
+      <th scope="col">{{x.birthday.strftime('%Y-%m-%d')}}</th>
+      <th scope="col">{{x.location}}</th>
+      <th scope="col">{{x.date_created.strftime('%Y-%m-%d')}}</th>
+    </tr>
+  {% endfor%}
+    
+  </tbody>
+</table>
+
+
+{% endblock content %}

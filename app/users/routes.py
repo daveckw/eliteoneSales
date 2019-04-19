@@ -54,18 +54,36 @@ def logout():
 @login_required
 def account():
     form = UpdateAccountForm()
+    form.upline.choices = [(upline.id, upline.username) for upline in User.query.all()]
+    form.referrer.choices = [(referrer.id, referrer.username) for referrer in User.query.all()]
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.fullname = form.fullname.data
+        current_user.title = form.title.data
+        current_user.ic_number = form.ic_number.data
+        current_user.phone_number = form.phone_number.data
+        current_user.birthday = form.birthday.data
+        current_user.location = form.location.data
+        current_user.upline_id = form.upline.data
+        current_user.referrer_id = form.referrer.data
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        form.fullname.data  = current_user.fullname
+        form.title.data = current_user.title
+        form.ic_number.data = current_user.ic_number
+        form.phone_number.data = current_user.phone_number
+        form.birthday.data = current_user.birthday
+        form.location.data = current_user.location
+        form.upline.data = current_user.upline_id
+        form.referrer.data = current_user.referrer_id
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)

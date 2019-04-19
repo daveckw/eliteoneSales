@@ -70,8 +70,8 @@
 <row name="location" null="1" autoincrement="0">
 <datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
-<row name="rencomm" null="1" autoincrement="0">
-<datatype>DECIMAL</datatype>
+<row name="Developer" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>

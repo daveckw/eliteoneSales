@@ -3,7 +3,7 @@
         <article class="media content-section">
           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
           <div class="media-body">
-              <h2><a href="{{ url_for('users.user_posts', username=user.username) }}">Hierachy for {{ user.username }}</a></h2>
+              <h2><a>Hierachy for {{ user.username }}</a></h2>
             </div>
         </article>
     {% for downline in downlines %}
@@ -11,6 +11,7 @@
           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + downline.image_file) }}">
           <div class="media-body">
               <h2><a class="article-title" href="{{ url_for('users.user_posts', username=downline.username) }}">{{ downline.username }}</a></h2>
+              <h4>{{ downline.title }}</h4>
             </div>
         </article>
     {% endfor %}

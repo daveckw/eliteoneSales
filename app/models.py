@@ -12,17 +12,24 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    fullname = db.Column(db.String(20))
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    phone_number = db.Column(db.String(20), unique=True, nullable=False)
+    ic_number = db.Column(db.String(20), unique=True)
+    birthday = db.Column(db.DateTime)
     posts = db.relationship('Post', backref='author', lazy=True)
     upline_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
-    upline = db.relationship(lambda: User, remote_side=id, backref='downline')
+    upline = db.relationship(lambda: User, remote_side=id, backref='downline', foreign_keys = 'User.upline_id')
+    referrer_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    referrer = db.relationship(lambda: User, remote_side=id, backref='referree', foreign_keys = 'User.referrer_id')
     title = db.Column(db.String(20), nullable=False, default='REN')
     user_sale = db.relationship(lambda: UserSale, remote_side=id, backref='user')
     team = db.Column(db.String(50))
     location = db.Column(db.String(50))
+    date_created = db.Column(db.DateTime,default=datetime.utcnow)
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)

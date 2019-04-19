@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from app.models import User
@@ -30,19 +30,25 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
 
 class UpdateAccountForm(FlaskForm):
-    username = StringField('Username',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    fullname = StringField('Fullname', validators=[DataRequired(), Length(min=2, max=20)])
+    title = StringField('Position/Title', validators=[DataRequired(), Length(min=2, max=20)])
+    ic_number = StringField('IC Number', validators=[DataRequired(), Length(min=2, max=20)])
+    phone_number = StringField('Mobile Number', validators=[DataRequired(), Length(min=2, max=20)])
+    birthday = DateField('Birthday', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired(), Length(min=2, max=20)])
+    upline = SelectField('Upline',coerce=int, choices=[],validators=[DataRequired()])
+    referrer = SelectField('Referrer',coerce=int, choices=[], validators=[DataRequired()])
+
     submit = SubmitField('Update')
 
     def validate_username(self, username):

@@ -9,7 +9,6 @@ from app import db
 
 sales = Blueprint('sales', __name__)
 
-
 @sales.route("/create_sale", methods=['GET', 'POST'])
 @login_required
 def create_sale():
@@ -17,6 +16,7 @@ def create_sale():
     form.ren1.choices = [(ren1.id, ren1.username) for ren1 in User.query.all()]
     form.project.choices = [(project.id, project.name) for project in Project.query.all()]
     if form.validate_on_submit():
+        
         user = User.query.filter_by(username=current_user.username).first()
         project_id = form.project.data
         psale = ProjectSale(date_posted=form.date_posted.data,
@@ -63,7 +63,7 @@ def new_project():
         db.session.commit()
         flash('Your project has been created!', 'success')
         return redirect(url_for('main.home'))
-    return render_template('test.html', title='New Project',
+    return render_template('new_project.html', title='New Project',
                             form=form, legend='New Project')
 
 
@@ -74,3 +74,10 @@ def display_sales():
     user = current_user
     usersale = UserSale.query.filter_by(user_id=user.id).all()
     return render_template('display_sales.html', usersale=usersale, user=user)
+
+#Display User Sales Table
+@sales.route("/list_members", methods=['GET'])
+@login_required
+def list_members():
+    user = User.query.all()
+    return render_template('list_members.html', user=user)

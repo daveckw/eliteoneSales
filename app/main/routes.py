@@ -17,3 +17,7 @@ def home():
 @main.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+@main.route("/datepicker")
+def datepicker():
+    return render_template('datepicker.html', title='Date Picker')
